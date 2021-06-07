@@ -3,11 +3,13 @@
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
+    private int size = 0;
 
     void clear() {
         for (int i = 0; i < storage.length; i++) {
             if (storage[i] != null) {
                 storage[i] = null;
+                size--;
             } else {
                 break;
             }
@@ -18,6 +20,7 @@ public class ArrayStorage {
         for (int i = 0; i < storage.length; i++) {
             if (storage[i] == null) {
                 storage[i] = r;
+                size++;
                 break;
             }
         }
@@ -33,21 +36,29 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        Integer deleted = null;
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i].uuid.equals(uuid)) {
-                deleted = i;
-                storage[i] = null;
-                break;
+        int deleted = 0;
+        if (storage[0].uuid.equals(uuid)){
+            storage[0] = null;
+            size--;
+        } else {
+            for (int i = 1; i < storage.length; i++) {
+                if (storage[i].uuid.equals(uuid)) {
+                    deleted = i;
+                    storage[i] = null;
+                    size--;
+                    break;
+                }
             }
         }
-        if (deleted != null) {
+
+        if ((deleted == 0 && storage[0] == null) || (deleted > 0)) {
             for (int i = deleted; i < storage.length - 1; i++) {
                 if (storage[i + 1] == null) break;
                 storage[i] = storage[i + 1];
-                storage[i + 1] = null;
             }
         }
+
+        storage[size] = null;
     }
 
     /**
@@ -65,13 +76,6 @@ public class ArrayStorage {
     }
 
     int size() {
-        int size = 0;
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) {
-                size = i;
-                break;
-            }
-        }
         return size;
     }
 }
