@@ -6,72 +6,54 @@ public class ArrayStorage {
     private int size = 0;
 
     void clear() {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] != null) {
-                storage[i] = null;
-                size--;
-            } else {
-                break;
-            }
+        for (int i = 0; i < size; i++) {
+            storage[i] = null;
         }
+        size = 0;
     }
 
     void save(Resume r) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) {
-                storage[i] = r;
-                size++;
-                break;
-            }
-        }
+        storage[size++] = r;
     }
 
     Resume get(String uuid) {
-        for (Resume r : storage) {
-            if (r != null && r.uuid.equals(uuid)) {
-                return r;
+        for (int i = 0; i < size; i++) {
+            if (storage[i] != null && storage[i].uuid.equals(uuid)) {
+                return storage[i];
             }
         }
         return null;
     }
 
     void delete(String uuid) {
-        int deleted = 0;
-        if (storage[0].uuid.equals(uuid)){
-            storage[0] = null;
-            size--;
-        } else {
-            for (int i = 1; i < storage.length; i++) {
+        if (size > 0) {
+            int deleted = 0;
+            boolean found = false;
+            for (int i = 0; i < size; i++) {
                 if (storage[i].uuid.equals(uuid)) {
                     deleted = i;
-                    storage[i] = null;
-                    size--;
+                    found = true;
                     break;
                 }
             }
-        }
 
-        if ((deleted == 0 && storage[0] == null) || (deleted > 0)) {
-            for (int i = deleted; i < storage.length - 1; i++) {
-                if (storage[i + 1] == null) break;
-                storage[i] = storage[i + 1];
+            if(found) {
+                if (size - 1 - deleted >= 0)
+                    System.arraycopy(storage, deleted + 1, storage, deleted, size - 1 - deleted);
+                storage[size--] = null;
             }
         }
-
-        storage[size] = null;
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        Resume[] newStorage = new Resume[size()];
+        Resume[] newStorage = new Resume[size];
         if (newStorage.length == 0) {
             return newStorage;
         }
-        for (int i = 0; i < newStorage.length; i++) {
-            newStorage[i] = storage[i];
-        }
+        System.arraycopy(storage, 0, newStorage, 0, newStorage.length);
         return newStorage;
     }
 
