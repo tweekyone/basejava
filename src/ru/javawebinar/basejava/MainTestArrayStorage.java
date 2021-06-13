@@ -1,8 +1,10 @@
-import storage.ArrayStorage;
-import model.Resume;
+package ru.javawebinar.basejava;
+
+import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.ArrayStorage;
 
 /**
- * Test for your storage.ArrayStorage implementation
+ * Test ru.javawebinar.basejava.ru.javawebinar.basejava.storage.ArrayStorage
  */
 public class MainTestArrayStorage {
     static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
@@ -14,8 +16,6 @@ public class MainTestArrayStorage {
         r2.setUuid("uuid2");
         Resume r3 = new Resume();
         r3.setUuid("uuid3");
-        Resume update = new Resume();
-        update.setUuid("uuid3");
 
         ARRAY_STORAGE.save(r1);
         ARRAY_STORAGE.save(r2);
@@ -29,9 +29,6 @@ public class MainTestArrayStorage {
         printAll();
         ARRAY_STORAGE.delete(r1.getUuid());
         printAll();
-        System.out.println("Size: " + ARRAY_STORAGE.size());
-        ARRAY_STORAGE.update(update);
-
         ARRAY_STORAGE.clear();
         printAll();
 
